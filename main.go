@@ -7,12 +7,28 @@ import (
 	"github.com/ant0ine/go-json-rest/rest"
 )
 
+var (
+	allowedMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	allowedHeaders = []string{
+		"Accept",
+		"Authorization",
+		"X-Real-IP",
+		"Content-Type",
+		"X-Custom-Header",
+		"Query",
+		"Language",
+		"Origin",
+	}
+)
+
 func main() {
-	api := rest.NewApi()
-	api.Use(rest.DefaultDevStack...)
+	log.Fatal(http.ListenAndServe(":8888", newAPI().MakeHandler()))
+}
+
+func newAPI() (api *rest.Api) {
 	router, err := rest.MakeRouter(
-		rest.Get("/qorder", func(w rest.ResponseWriter, req *rest.Request) {
-			w.WriteJson(map[string]string{"msg": "hello QOrder"})
+		rest.Get("/orders", func(w rest.ResponseWriter, req *rest.Request) {
+			w.WriteJson([]map[string]string{map[string]string{"id": "123456"}})
 		}),
 	)
 
@@ -20,6 +36,18 @@ func main() {
 		log.Fatal(err)
 	}
 
+	api = rest.NewApi()
+	api.Use(rest.DefaultCommonStack...)
+	api.Use(&rest.CorsMiddleware{
+		RejectNonCorsRequests: false,
+		OriginValidator: func(origin string, request *rest.Request) bool {
+			return true
+		},
+		AllowedMethods:                allowedMethods,
+		AllowedHeaders:                allowedHeaders,
+		AccessControlAllowCredentials: true,
+		AccessControlMaxAge:           3600,
+	})
 	api.SetApp(router)
-	log.Fatal(http.ListenAndServe(":8888", api.MakeHandler()))
+	return
 }
