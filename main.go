@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/anuchitprasertsang/QOrder-backend/orders"
 )
 
 var (
@@ -27,9 +28,7 @@ func main() {
 
 func newAPI() (api *rest.Api) {
 	router, err := rest.MakeRouter(
-		rest.Get("/orders", func(w rest.ResponseWriter, req *rest.Request) {
-			w.WriteJson([]map[string]string{map[string]string{"id": "123456"}})
-		}),
+		rest.Get("/orders", orders.Get),
 	)
 
 	if err != nil {
