@@ -24,7 +24,12 @@ Get all of orders items
 
 ```json
 {
-  "name": ""
+  "menu_id": "58059ff853490a001277d862",
+  "menu_name": "ต้มยำกุ้ง",
+  "amount": 1,
+  "price": 99,
+  "seat": "05",
+  "status": "Waiting"
 }
 ```
 ===
