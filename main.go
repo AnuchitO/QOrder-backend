@@ -33,6 +33,7 @@ func newAPI() (api *rest.Api) {
 		rest.Get("/orders", orders.Get),
 		rest.Post("/orders", orders.Post),
 		rest.Put("/orders/:id", orders.Put),
+		rest.Delete("/orders/:id", orders.Delete),
 	)
 
 	if err != nil {

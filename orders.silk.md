@@ -52,5 +52,14 @@ Get all of orders items
 ### Example response
 * Status: `200`
 
+## DELETE /orders/57e3f8e85e812900039d4647
+* Content-Type: `application/json`
+* Accept: `application/json`
+
+===
+
+### Example response
+* Status: `200`
+
+
 #PATCH /users/:id(.:format) users#update
-#DELETE /users/:id(.:format) users#destroy
