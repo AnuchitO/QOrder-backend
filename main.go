@@ -32,6 +32,7 @@ func newAPI() (api *rest.Api) {
 	router, err := rest.MakeRouter(
 		rest.Get("/orders", orders.Get),
 		rest.Post("/orders", orders.Post),
+		rest.Put("/orders/:id", orders.Put),
 	)
 
 	if err != nil {

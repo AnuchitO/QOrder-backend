@@ -27,7 +27,7 @@ Get all of orders items
   "menu_id": "58059ff853490a001277d862",
   "menu_name": "ต้มยำกุ้ง",
   "amount": 1,
-  "price": 99,
+  "price": 99.5,
   "seat": "05",
   "status": "Waiting"
 }
@@ -37,6 +37,20 @@ Get all of orders items
 ### Example response
 * Status: `201`
 
-#PUT /users/:id(.:format) users#update
+## PUT /orders/57e3f8e85e812900039d4647
+* Content-Type: `application/json`
+* Accept: `application/json`
+
+```json
+{
+    "status": "Served"
+}
+```
+
+===
+
+### Example response
+* Status: `200`
+
 #PATCH /users/:id(.:format) users#update
 #DELETE /users/:id(.:format) users#destroy
