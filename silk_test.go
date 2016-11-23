@@ -8,6 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/anuchitprasertsang/QOrder-backend/db"
+	"github.com/anuchitprasertsang/QOrder-backend/menus"
 	"github.com/anuchitprasertsang/QOrder-backend/orders"
 	"github.com/matryer/silk/runner"
 )
@@ -38,4 +39,28 @@ func TestOrdersEndpoint(t *testing.T) {
 
 	//runner.New(t, s.URL).RunGlob(filepath.Glob("*.silk.md"))
 	runner.New(t, s.URL).RunFile("./orders.silk.md")
+}
+
+func TestMenusEndpoint(t *testing.T) {
+	db.ConnectLocalHost()
+	c := db.Menus()
+	c.RemoveAll(bson.M{})
+
+	m := menus.Menus{
+		ID:       bson.ObjectIdHex("57e3f8e85e812900039b1234"),
+		MenuName: "ต้มยำกุ้ง",
+		Price:    99,
+	}
+
+	err := c.Insert(m)
+	if err != nil {
+		fmt.Printf("% #v\n", err.Error())
+		return
+	}
+
+	s := httptest.NewServer(newAPI().MakeHandler())
+	defer s.Close()
+
+	//runner.New(t, s.URL).RunGlob(filepath.Glob("*.silk.md"))
+	runner.New(t, s.URL).RunFile("./menus.silk.md")
 }
