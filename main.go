@@ -6,6 +6,7 @@ import (
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/anuchitprasertsang/QOrder-backend/db"
+	"github.com/anuchitprasertsang/QOrder-backend/menus"
 	"github.com/anuchitprasertsang/QOrder-backend/orders"
 )
 
@@ -34,6 +35,11 @@ func newAPI() (api *rest.Api) {
 		rest.Post("/orders", orders.Post),
 		rest.Put("/orders/:id", orders.Put),
 		rest.Delete("/orders/:id", orders.Delete),
+
+		rest.Get("/menus", menus.Get),
+		rest.Post("/menus", menus.Post),
+		rest.Put("/menus/:id", menus.Put),
+		rest.Delete("/menus/:id", menus.Delete),
 	)
 
 	if err != nil {
