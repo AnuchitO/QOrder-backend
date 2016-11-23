@@ -2,23 +2,24 @@ package orders
 
 import (
 	"github.com/ant0ine/go-json-rest/rest"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
 func Get(w rest.ResponseWriter, req *rest.Request) {
-	w.WriteJson(findOreders())
+	w.WriteJson(findAllOrders())
 }
 
-func findOreders() []Orders {
-	return []Orders{
-		Orders{
-			ID:       bson.ObjectIdHex("57e3f8e85e812900039d4647"),
-			MenuID:   bson.ObjectIdHex("58059ff853490a001277d862"),
-			MenuName: "ต้มยำกุ้ง",
-			Amount:   1,
-			Price:    99,
-			Seat:     "05",
-			Status:   "Waiting",
-		},
+func findAllOrders() (orders []Orders) {
+	session, err := mgo.Dial("mongodb://localhost:27017")
+	if err != nil {
+		panic(err)
 	}
+	defer session.Close()
+
+	session.SetMode(mgo.Strong, true)
+
+	c := session.DB("qorders").C("orders")
+	c.Find(bson.M{}).All(&orders)
+	return
 }

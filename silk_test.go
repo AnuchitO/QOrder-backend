@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http/httptest"
 	"testing"
 
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
+	"github.com/anuchitprasertsang/QOrder-backend/orders"
 	"github.com/matryer/silk/runner"
 )
 
@@ -17,9 +19,26 @@ func TestOrdersEndpoint(t *testing.T) {
 	}
 	defer session.Close()
 
-	session.SetMode(mgo.Monotonic, true)
+	session.SetMode(mgo.Strong, true)
 	c := session.DB("qorders").C("orders")
 	c.RemoveAll(bson.M{})
+
+	o := orders.Orders{
+		ID:       bson.ObjectIdHex("57e3f8e85e812900039d4647"),
+		MenuID:   bson.ObjectIdHex("58059ff853490a001277d862"),
+		MenuName: "ต้มยำกุ้ง",
+		Amount:   1,
+		Price:    99,
+		Seat:     "05",
+		Status:   "Waiting",
+	}
+	c = session.DB("qorders").C("orders")
+	err = c.Insert(o)
+	if err != nil {
+		fmt.Printf("% #v\n", err.Error())
+		return
+	}
+
 	s := httptest.NewServer(newAPI().MakeHandler())
 	defer s.Close()
 
