@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/anuchitprasertsang/QOrder-backend/db"
 	"github.com/anuchitprasertsang/QOrder-backend/orders"
 )
 
@@ -23,6 +24,7 @@ var (
 )
 
 func main() {
+	db.ConnectLocalHost()
 	log.Fatal(http.ListenAndServe(":8888", newAPI().MakeHandler()))
 }
 

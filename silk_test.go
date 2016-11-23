@@ -5,22 +5,16 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
+	"github.com/anuchitprasertsang/QOrder-backend/db"
 	"github.com/anuchitprasertsang/QOrder-backend/orders"
 	"github.com/matryer/silk/runner"
 )
 
 func TestOrdersEndpoint(t *testing.T) {
-	session, err := mgo.Dial("mongodb://localhost:27017")
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	session.SetMode(mgo.Strong, true)
-	c := session.DB("qorders").C("orders")
+	db.ConnectLocalHost()
+	c := db.Orders()
 	c.RemoveAll(bson.M{})
 
 	o := orders.Orders{
@@ -32,8 +26,8 @@ func TestOrdersEndpoint(t *testing.T) {
 		Seat:     "05",
 		Status:   "Waiting",
 	}
-	c = session.DB("qorders").C("orders")
-	err = c.Insert(o)
+
+	err := c.Insert(o)
 	if err != nil {
 		fmt.Printf("% #v\n", err.Error())
 		return

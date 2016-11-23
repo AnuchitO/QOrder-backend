@@ -2,7 +2,7 @@ package orders
 
 import (
 	"github.com/ant0ine/go-json-rest/rest"
-	mgo "gopkg.in/mgo.v2"
+	"github.com/anuchitprasertsang/QOrder-backend/db"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -11,15 +11,6 @@ func Get(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func findAllOrders() (orders []Orders) {
-	session, err := mgo.Dial("mongodb://localhost:27017")
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	session.SetMode(mgo.Strong, true)
-
-	c := session.DB("qorders").C("orders")
-	c.Find(bson.M{}).All(&orders)
+	db.Orders().Find(bson.M{}).All(&orders)
 	return
 }
